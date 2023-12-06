@@ -15,6 +15,7 @@ def transcribe(audio_file, prompt: str) -> str:
         model="whisper-1",
         prompt=prompt,
     )
+    print(transcript)
     return transcript["text"]
 
 # 句読点で改行する関数
