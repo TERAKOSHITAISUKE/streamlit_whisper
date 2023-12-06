@@ -15,7 +15,6 @@ def transcribe(audio_file, prompt: str) -> str:
         model="whisper-1",
         prompt=prompt,
     )
-    st.write(transcript)
     return transcript.text
 
 # 句読点で改行する関数
@@ -34,7 +33,7 @@ def summarize_text_with_chatgpt(text: str) -> str:
         ],
     )
     st.write(chat_model)
-    return chat_model['choices'][0]['message']['content']
+    return chat_model.choices[0].message.content
 
 # StreamlitのUIを定義
 st.title('音声ファイルの文字起こしと要約')
