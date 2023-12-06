@@ -9,9 +9,9 @@ api_key = st.text_input('OpenAIのAPIキーを入力してください', type='p
 client = OpenAI(api_key=api_key)
 
 # 音声ファイルを文字起こしする関数
-def transcribe(audio_filepath, prompt: str) -> str:
+def transcribe(audio_file, prompt: str) -> str:
     transcript = client.audio.transcriptions.create(
-        file=open(audio_filepath, "rb"),
+        file=audio_file,
         model="whisper-1",
         prompt=prompt,
     )
