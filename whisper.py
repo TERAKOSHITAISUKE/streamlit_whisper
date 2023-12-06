@@ -28,7 +28,7 @@ def summarize_text_with_chatgpt(text: str) -> str:
       messages=[
             {"role": "system", "content": "You use only Japanese. So, you must response by Japanese."},
             {"role": "user", "content": f"Please summarize the following content: {text}"},
-            {"role": "user", "content": "Total words is 1000 words."},
+            {"role": "user", "content": "Defenitely total words is 1000 words."},
             {"role": "user", "content": "Please insert a summarized title at the beginning."},
         ],
     )
