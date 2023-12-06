@@ -4,6 +4,10 @@ import urllib
 import re
 import datetime
 
+# OpenAIのAPIキーを入力
+api_key = st.text_input('OpenAIのAPIキーを入力してください', type='password')
+openai.api_key = api_key
+
 # 音声ファイルを文字起こしする関数
 def transcribe(audio_filepath, prompt: str) -> str:
     transcript = openai.Audio.transcribe(
