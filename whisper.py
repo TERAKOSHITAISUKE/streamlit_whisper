@@ -1,16 +1,16 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 import urllib
 import re
 import datetime
 
 # OpenAIのAPIキーを入力
 api_key = st.text_input('OpenAIのAPIキーを入力してください', type='password')
-openai.api_key = api_key
+client = OpenAI(api_key=api_key)
 
 # 音声ファイルを文字起こしする関数
 def transcribe(audio_filepath, prompt: str) -> str:
-    transcript = openai.Audio.transcribe(
+    transcript = client.audio.transcriptions.create(
         file=open(audio_filepath, "rb"),
         model="whisper-1",
         prompt=prompt,
@@ -23,7 +23,7 @@ def split_text_by_punctuation(text: str) -> str:
 
 # OpenAIのChatGPTを使用してテキストを要約する関数
 def summarize_text_with_chatgpt(text: str) -> str:
-    chat_model = openai.ChatCompletion.create(
+    chat_model = client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
             {"role": "system", "content": "You use only Japanese. So, you must response by Japanese."},
