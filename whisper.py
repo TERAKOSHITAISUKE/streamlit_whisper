@@ -16,7 +16,7 @@ def transcribe(audio_file, prompt: str) -> str:
         prompt=prompt,
     )
     st.write(transcript)
-    return transcript["text"]
+    return transcript.text
 
 # 句読点で改行する関数
 def split_text_by_punctuation(text: str) -> str:
