@@ -32,7 +32,6 @@ def summarize_text_with_chatgpt(text: str) -> str:
             {"role": "user", "content": "Please insert a summarized title at the beginning."},
         ],
     )
-    st.write(chat_model)
     return chat_model.choices[0].message.content
 
 # StreamlitのUIを定義
