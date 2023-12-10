@@ -56,7 +56,7 @@ if uploaded_file is not None:
     c = conn.cursor()
 
     c.execute('''
-        CREATE TABLE transcriptions
+        CREATE TABLE IF NOT EXISTS transcriptions
         (id INTEGER PRIMARY KEY, transcript TEXT, summary TEXT)
     ''')
     conn.commit()
