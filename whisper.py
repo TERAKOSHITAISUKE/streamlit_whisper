@@ -46,23 +46,20 @@ def save_to_db(transcript: str, summary: str):
     c.execute("INSERT INTO transcriptions (transcript, summary) VALUES (?, ?)", (transcript, summary))
     conn.commit()
 
-conn = sqlite3.connect('transcriptions.db')
-c = conn.cursor()
-
-c.execute('''
-    CREATE TABLE transcriptions
-    (id INTEGER PRIMARY KEY, transcript TEXT, summary TEXT)
-''')
-conn.commit()
-
-
-
 
 # StreamlitのUIを定義
 st.title('音声ファイルの文字起こしと要約')
 uploaded_file = st.file_uploader("音声ファイルをアップロードしてください", type=['m4a'])
 
 if uploaded_file is not None:
+    conn = sqlite3.connect('transcriptions.db')
+    c = conn.cursor()
+
+    c.execute('''
+        CREATE TABLE transcriptions
+        (id INTEGER PRIMARY KEY, transcript TEXT, summary TEXT)
+    ''')
+    conn.commit()
     # 音声ファイルを文字起こし
     prompt = "日本語の音声を文字起こししてください。"
     transcript = transcribe(uploaded_file, prompt)
