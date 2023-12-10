@@ -3,6 +3,8 @@ from openai import OpenAI
 import urllib
 import re
 import datetime
+import sqlite3
+import pandas as pd
 
 # OpenAIのAPIキーを入力
 api_key = st.text_input('OpenAIのAPIキーを入力してください', type='password')
@@ -34,6 +36,28 @@ def summarize_text_with_chatgpt(text: str) -> str:
     )
     return chat_model.choices[0].message.content
 
+
+def fetch_transcriptions():
+    c.execute("SELECT * FROM transcriptions")
+    rows = c.fetchall()
+    return pd.DataFrame(rows, columns=['id', 'transcript', 'summary'])
+
+def save_to_db(transcript: str, summary: str):
+    c.execute("INSERT INTO transcriptions (transcript, summary) VALUES (?, ?)", (transcript, summary))
+    conn.commit()
+
+conn = sqlite3.connect('transcriptions.db')
+c = conn.cursor()
+
+c.execute('''
+    CREATE TABLE transcriptions
+    (id INTEGER PRIMARY KEY, transcript TEXT, summary TEXT)
+''')
+conn.commit()
+
+
+
+
 # StreamlitのUIを定義
 st.title('音声ファイルの文字起こしと要約')
 uploaded_file = st.file_uploader("音声ファイルをアップロードしてください", type=['m4a'])
@@ -48,9 +72,18 @@ if uploaded_file is not None:
 
     # 要約
     summary = summarize_text_with_chatgpt(split_transcript)
+    # データベースに保存
+    save_to_db(transcript, summary)
 
     # 結果を表示
     st.write('文字起こし結果:')
     st.write(transcript)
     st.write('要約結果:')
     st.write(summary)
+
+    # データベースから内容を取得
+    df = fetch_transcriptions()
+
+    # 結果を表示
+    st.write('データベースの内容:')
+    st.dataframe(df)
